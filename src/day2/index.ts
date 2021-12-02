@@ -27,7 +27,28 @@ class Day2 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    let x = 0;
+    let y = 0;
+    let aim = 0;
+
+    const dict: { [id: string]: (arg0: number) => void } = {
+      forward: (n) => {
+        x += n;
+        y += n * aim;
+      },
+      down: (n) => (aim += n),
+      up: (n) => (aim -= n),
+    };
+
+    input
+      .split(`\n`)
+      .filter((x) => x != "")
+      .forEach((line) => {
+        var parts = line.split(" ");
+        dict[parts[0]](parseInt(parts[1], 10));
+      });
+
+    return (x * y).toString();
   }
 }
 
