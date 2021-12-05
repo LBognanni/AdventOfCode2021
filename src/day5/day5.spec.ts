@@ -33,7 +33,7 @@ describe("On Day 5", () => {
 
   it(`Can expand a horizontal line`, () => {
     expect([
-      ...day5.expandLine({ p1: { x: 1, y: 2 }, p2: { x: 5, y: 2 } }),
+      ...day5.expandLine({ p1: { x: 1, y: 2 }, p2: { x: 5, y: 2 } }, false),
     ]).toMatchObject([
       { x: 1, y: 2 },
       { x: 2, y: 2 },
@@ -45,7 +45,7 @@ describe("On Day 5", () => {
 
   it(`Can expand a vertical line`, () => {
     expect([
-      ...day5.expandLine({ p1: { x: 1, y: 5 }, p2: { x: 1, y: 1 } }),
+      ...day5.expandLine({ p1: { x: 1, y: 5 }, p2: { x: 1, y: 1 } }, false),
     ]).toMatchObject([
       { x: 1, y: 1 },
       { x: 1, y: 2 },
@@ -55,7 +55,33 @@ describe("On Day 5", () => {
     ]);
   });
 
-  it(`part 1returns the expected value for the example input`, () => {
+  it(`Can expand a diagonal line`, () => {
+    expect([
+      ...day5.expandLine({ p1: { x: 1, y: 1 }, p2: { x: 4, y: 4 } }, true),
+    ]).toMatchObject([
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+      { x: 3, y: 3 },
+      { x: 4, y: 4 },
+    ]);
+  });
+
+  it(`Can expand a different diagonal line`, () => {
+    expect([
+      ...day5.expandLine({ p1: { x: 4, y: 1 }, p2: { x: 1, y: 4 } }, true),
+    ]).toMatchObject([
+      { x: 4, y: 1 },
+      { x: 3, y: 2 },
+      { x: 2, y: 3 },
+      { x: 1, y: 4 },
+    ]);
+  });
+
+  it(`part 1 returns the expected value for the example input`, () => {
     expect(day5.solveForPartOne(sample)).toBe("5");
+  });
+
+  it(`part 2 returns the expected value for the example input`, () => {
+    expect(day5.solveForPartTwo(sample)).toBe("12");
   });
 });

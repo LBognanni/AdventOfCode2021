@@ -34,7 +34,7 @@ class Day5 extends Day {
     });
   }
 
-  public *expandLine(line: Line): Generator<Point> {
+  public *expandLine(line: Line, diagonal: boolean): Generator<Point> {
     if (line.p1.x == line.p2.x) {
       for (
         let y = Math.min(line.p1.y, line.p2.y);
@@ -51,13 +51,23 @@ class Day5 extends Day {
       ) {
         yield { x, y: line.p1.y };
       }
+    } else if (diagonal) {
+      const dx = line.p1.x < line.p2.x ? 1 : -1;
+      const dy = line.p1.y < line.p2.y ? 1 : -1;
+      for (
+        let x = line.p1.x, y = line.p1.y;
+        x != line.p2.x + dx, y != line.p2.y + dy;
+        x += dx, y += dy
+      ) {
+        yield { x, y };
+      }
     }
   }
 
-  solveForPartOne(input: string): string {
+  solve(input: string, diagonal: boolean): string {
     const lines = this.parsePoints(input);
 
-    const allPoints = lines.flatMap((l) => [...this.expandLine(l)]);
+    const allPoints = lines.flatMap((l) => [...this.expandLine(l, diagonal)]);
 
     let groups = allPoints.reduce((acc, pt) => {
       acc[`${pt.x},${pt.y}`] = (acc[`${pt.x},${pt.y}`] || 0) + 1;
@@ -69,8 +79,12 @@ class Day5 extends Day {
       .length.toString();
   }
 
+  solveForPartOne(input: string): string {
+    return this.solve(input, false);
+  }
+
   solveForPartTwo(input: string): string {
-    return "input";
+    return this.solve(input, true);
   }
 }
 
