@@ -23,28 +23,48 @@ const example = `7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19
 
 describe("On Day 4", () => {
   it(`Can parse a simple puzzle`, () => {
-      expect(day4.parsePuzzle(`1,2,3,4,5,6
+    expect(
+      day4.parsePuzzle(`1,2,3,4,5,6
 1 1 1
 2 2 2
 3 3 3
 
 1 2 3
 1 2 3
-1 2 3`)).toMatchObject({
-        draws: [1,2,3,4,5,6],
-        boards:[
-            [
-                {x:0,y:0,num:1,mark:false},{x:1,y:0,num:1,mark:false},{x:2,y:0,num:1,mark:false},
-                {x:0,y:1,num:2,mark:false},{x:1,y:1,num:2,mark:false},{x:2,y:1,num:2,mark:false},
-                {x:0,y:2,num:3,mark:false},{x:1,y:2,num:3,mark:false},{x:2,y:2,num:3,mark:false},
-            ],
-            [
-                {x:0,y:0,num:1,mark:false},{x:1,y:0,num:2,mark:false},{x:2,y:0,num:3,mark:false},
-                {x:0,y:1,num:1,mark:false},{x:1,y:1,num:2,mark:false},{x:2,y:1,num:3,mark:false},
-                {x:0,y:2,num:1,mark:false},{x:1,y:2,num:2,mark:false},{x:2,y:2,num:3,mark:false},
-            ],
-        ]
-      });
+1 2 3`)
+    ).toMatchObject({
+      draws: [1, 2, 3, 4, 5, 6],
+      boards: [
+        {
+          hasWon: false,
+          pieces: [
+            { x: 0, y: 0, num: 1, mark: false },
+            { x: 1, y: 0, num: 1, mark: false },
+            { x: 2, y: 0, num: 1, mark: false },
+            { x: 0, y: 1, num: 2, mark: false },
+            { x: 1, y: 1, num: 2, mark: false },
+            { x: 2, y: 1, num: 2, mark: false },
+            { x: 0, y: 2, num: 3, mark: false },
+            { x: 1, y: 2, num: 3, mark: false },
+            { x: 2, y: 2, num: 3, mark: false },
+          ],
+        },
+        {
+          hasWon: false,
+          pieces: [
+            { x: 0, y: 0, num: 1, mark: false },
+            { x: 1, y: 0, num: 2, mark: false },
+            { x: 2, y: 0, num: 3, mark: false },
+            { x: 0, y: 1, num: 1, mark: false },
+            { x: 1, y: 1, num: 2, mark: false },
+            { x: 2, y: 1, num: 3, mark: false },
+            { x: 0, y: 2, num: 1, mark: false },
+            { x: 1, y: 2, num: 2, mark: false },
+            { x: 2, y: 2, num: 3, mark: false },
+          ],
+        },
+      ],
+    });
   });
   it(`Part 1 solves for example case`, () => {
     expect(day4.solveForPartOne(example)).toBe("4512");
