@@ -1,4 +1,3 @@
-import { count } from "console";
 import { Day } from "../day";
 
 type fishGroup = {
@@ -27,12 +26,12 @@ class Day6 extends Day {
       });
     }
 
-    arr.push({days: 8, count: newBorns});
+    arr.push({ days: 8, count: newBorns });
 
     return arr;
   }
 
-  solve(input:string, days: number):string {
+  solve(input: string, days: number): string {
     let zipFish: fishGroup[] = Object.entries(
       input.split(",").reduce((acc, cur) => {
         acc[cur] = (acc[cur] || 0) + 1;
@@ -48,7 +47,7 @@ class Day6 extends Day {
   }
 
   solveForPartOne(input: string): string {
-      return this.solve(input, 80);
+    return this.solve(input, 80);
   }
 
   solveForPartTwo(input: string): string {
