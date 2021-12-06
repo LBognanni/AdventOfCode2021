@@ -13,15 +13,13 @@ class Day6 extends Day {
 
   ageFish(zipFish: fishGroup[]): fishGroup[] {
     let arr: fishGroup[] = [];
+    let newBorns = 0;
 
     for (let group of zipFish) {
       let days = group.days - 1;
       if (days == -1) {
         days = 6;
-        arr.push({
-          days: 8,
-          count: group.count,
-        });
+        newBorns += group.count;
       }
       arr.push({
         count: group.count,
@@ -29,10 +27,12 @@ class Day6 extends Day {
       });
     }
 
+    arr.push({days: 8, count: newBorns});
+
     return arr;
   }
 
-  solveForPartOne(input: string): string {
+  solve(input:string, days: number):string {
     let zipFish: fishGroup[] = Object.entries(
       input.split(",").reduce((acc, cur) => {
         acc[cur] = (acc[cur] || 0) + 1;
@@ -40,15 +40,19 @@ class Day6 extends Day {
       }, {} as { [key: string]: number })
     ).map((arr) => ({ days: parseInt(arr[0], 10), count: arr[1] }));
 
-    for (let day = 0; day < 80; ++day) {
+    for (let day = 0; day < days; ++day) {
       zipFish = this.ageFish(zipFish);
     }
 
     return zipFish.reduce((acc, cur) => acc + cur.count, 0).toString();
   }
 
+  solveForPartOne(input: string): string {
+      return this.solve(input, 80);
+  }
+
   solveForPartTwo(input: string): string {
-    return "input";
+    return this.solve(input, 256);
   }
 }
 
