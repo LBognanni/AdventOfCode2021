@@ -49,13 +49,8 @@ async function createInputFiles() {
   await createDirectoryIfItDoesntExist(inputDayPath);
 
   createFileWithContentIfItDoesntExist(
-    path.join(inputDayPath, "part1.txt"),
-    `{visit https://adventofcode.com/2021/day/${day} and paste the part 1 input here}`
-  );
-
-  createFileWithContentIfItDoesntExist(
-    path.join(inputDayPath, "part2.txt"),
-    `{After completing day 1, visit https://adventofcode.com/2021/day/${day} and paste the part 2 input here}`
+    path.join(inputDayPath, "input.txt"),
+    `{visit https://adventofcode.com/2021/day/${day} and paste the input here}`
   );
 }
 
