@@ -12,15 +12,6 @@ class Day7 extends Day {
       .map((x) => parseInt(x, 10));
   }
 
-  getDistinctValues(values: number[]): number[] {
-    return Object.keys(
-      values.reduce((acc, cur) => {
-        acc[cur] = 0;
-        return acc;
-      }, {} as { [key: number]: number })
-    ).map((x) => parseInt(x, 10));
-  }
-
   solve(input: string, method: (dist: number) => number): string {
     const values = this.getValues(input);
     const maxValue = values.reduce((prev, cur) => Math.max(prev, cur));
