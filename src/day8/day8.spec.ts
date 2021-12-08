@@ -12,7 +12,30 @@ egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce`;
 
 describe("On Day 8", () => {
-  it(`part 1 solves for the example input`, () => {
-    expect(day8.solveForPartOne(example)).toBe("26");
+    it(`part 1 solves for the example input`, () => {
+      expect(day8.solveForPartOne(example)).toBe("26");
+    });
+
+    it(`part 2 solves for a single line`, () => {
+        expect(day8.getDictionary(`acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf`)).toMatchObject({
+            "a": ["d"],
+            "b": ["e"],
+            "c": ["a"],
+            "d": ["f"],
+            "e": ["g"],
+            "f": ["b"],
+            "g": ["c"]
+        });
+    });
+
+    it(`part 2 gets the right value on  a single line`, () => {
+        expect(day8.getValue(`acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf`)).toBe(5353);
+    });
+    it(`part 2 gets the right value on  a different line`, () => {
+        expect(day8.getValue(`edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc`)).toBe(9781);
+    });
+
+    it(`part 2 solves for the example input`, () => {
+        expect(day8.solveForPartTwo(example)).toBe("61229");
+      });
   });
-});
