@@ -63,7 +63,17 @@ class Day11 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    const map = this.getMap(input);
+    const maxFlashes = map.length * map[0].length;
+
+    for (let i = 1; i < 100000; ++i) {
+      let flashes = this.runMap(map);
+      if (flashes == maxFlashes) {
+        return i.toString();
+      }
+    }
+
+    return "error";
   }
 }
 
