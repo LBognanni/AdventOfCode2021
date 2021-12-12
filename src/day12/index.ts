@@ -53,7 +53,41 @@ class Day12 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return input;
+    const connections = this.getConnections(input);
+    let paths: string[][] = [];
+
+    function hasRepeats(path: string[]): boolean {
+      return (
+        Object.entries(
+          path
+            .filter((x) => isLowerCase(x))
+            .reduce((acc, cur) => {
+              acc[cur] = (acc[cur] ?? 0) + 1;
+              return acc;
+            }, {} as { [key: string]: number })
+        ).filter((x) => x[1] == 2).length > 0
+      );
+    }
+
+    function connect(pt: string, path: string[]) {
+      if (!connections[pt]) return;
+      for (const sub of connections[pt]) {
+        if (isLowerCase(sub) && path.includes(sub)) {
+          if (sub === "start" || hasRepeats(path)) continue;
+        }
+        let subPath = path.slice();
+        subPath.push(sub);
+        if (sub === "end") {
+          paths.push(subPath);
+          continue;
+        }
+        connect(sub, subPath);
+      }
+    }
+
+    connect("start", ["start"]);
+
+    return paths.length.toString();
   }
 }
 
