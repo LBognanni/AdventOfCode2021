@@ -16,4 +16,16 @@ describe("On Day 15", () => {
   it(`part 1 solves for the example input`, () => {
     expect(day15.solveForPartOne(example)).toBe("40");
   });
+  it(`makes a big map`, () => {
+    expect(day15.makeBigMap([[8]])).toMatchObject([
+      [8, 9, 1, 2, 3],
+      [9, 1, 2, 3, 4],
+      [1, 2, 3, 4, 5],
+      [2, 3, 4, 5, 6],
+      [3, 4, 5, 6, 7],
+    ]);
+  });
+  it(`part 2 solves for the example input`, () => {
+    expect(day15.solveForPartTwo(example)).toBe("315");
+  });
 });

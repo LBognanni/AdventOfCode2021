@@ -5,31 +5,26 @@ type Point = {
   x: number;
   y: number;
   cost: number;
-  distS: number;
   distE: number;
 };
-
-function getFullCost(pt: Point) {}
 
 class Day15 extends Day {
   constructor() {
     super(15);
   }
 
-  a_star(map: number[][]): Point[] {
+  a_star(map: number[][]): number {
     let start: Point = {
       x: 0,
       y: 0,
       cost: 0,
       parent: null,
-      distS: 0,
       distE: 0,
     };
     let end: Point = {
       x: map[0].length - 1,
       y: map.length - 1,
       cost: 0,
-      distS: 0,
       distE: 0,
       parent: null,
     };
@@ -45,7 +40,6 @@ class Day15 extends Day {
         y: y,
         parent: [c.x, c.y].join(","),
         cost: c.cost + map[y][x],
-        distS: distFrom(x, y, start),
         distE: distFrom(x, y, end),
       };
     }
@@ -90,16 +84,8 @@ class Day15 extends Day {
       );
     }
 
-    // return the whole path
-    let res: Point[] = [];
-    let pos: string | null | undefined = [end.x, end.y].join(",");
-    while (pos) {
-      let pt = seen.get(pos);
-      if (pt) res.push(pt);
-      pos = pt?.parent;
-    }
-
-    return res;
+    let pos = [end.x, end.y].join(",");
+    return seen.get(pos)?.cost ?? 0;
   }
 
   solveForPartOne(input: string): string {
@@ -107,13 +93,41 @@ class Day15 extends Day {
       .split(/[\r\n]+/)
       .filter(Boolean)
       .map((x) => x.split("").map((y) => parseInt(y, 10)));
-    const path = this.a_star(map);
 
-    return path[0].cost.toString();
+    return this.a_star(map).toString();
+  }
+
+  makeBigMap(map: number[][]): number[][] {
+    function clamp(x: number) {
+      while (x > 9) x -= 9;
+      return x;
+    }
+
+    let bigMap: number[][] = [];
+    let w = map[0].length;
+    let h = map.length;
+    for (let y = 0; y < 5; ++y) {
+      for (let x = 0; x < 5; ++x) {
+        for (let my = 0; my < h; ++my) {
+          bigMap[y * h + my] ??= [];
+          for (let mx = 0; mx < w; ++mx) {
+            bigMap[y * h + my][x * w + mx] = clamp(map[mx][my] + x + y);
+          }
+        }
+      }
+    }
+    return bigMap;
   }
 
   solveForPartTwo(input: string): string {
-    return "input";
+    const map = input
+      .split(/[\r\n]+/)
+      .filter(Boolean)
+      .map((x) => x.split("").map((y) => parseInt(y, 10)));
+
+    let bigMap = this.makeBigMap(map);
+
+    return this.a_star(bigMap).toString();
   }
 }
 
