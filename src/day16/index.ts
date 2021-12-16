@@ -95,7 +95,53 @@ class Day16 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return "input";
+    let binaryInput = this.hex2bin(input);
+    var packet = this.parseBinary(binaryInput)[0];
+
+    function runPacket(packet: Packet): number {
+      switch (packet.id) {
+        case 4: // number
+          return packet.content;
+        case 0: // *
+          return packet.subPackets.reduce((acc, cur) => {
+            acc += runPacket(cur);
+            return acc;
+          }, 0);
+        case 1: // *
+          return packet.subPackets.reduce((acc, cur) => {
+            acc *= runPacket(cur);
+            return acc;
+          }, 1);
+        case 2: // Min
+          return packet.subPackets.reduce((acc, cur) => {
+            acc = Math.min(runPacket(cur), acc);
+            return acc;
+          }, Number.MAX_SAFE_INTEGER);
+        case 3: // Max
+          return packet.subPackets.reduce((acc, cur) => {
+            acc = Math.max(runPacket(cur), acc);
+            return acc;
+          }, Number.MIN_SAFE_INTEGER);
+        case 5: // >
+          return runPacket(packet.subPackets[0]) >
+            runPacket(packet.subPackets[1])
+            ? 1
+            : 0;
+        case 6: // <
+          return runPacket(packet.subPackets[0]) <
+            runPacket(packet.subPackets[1])
+            ? 1
+            : 0;
+        case 7: // ==
+          return runPacket(packet.subPackets[0]) ==
+            runPacket(packet.subPackets[1])
+            ? 1
+            : 0;
+      }
+      throw "Packet id incorrect";
+    }
+
+    return runPacket(packet).toString();
   }
 }
 
