@@ -15,18 +15,18 @@ class Day18 extends Day {
     super(18);
   }
 
-  tokenise(s: string): token[]{
+  tokenise(s: string): token[] {
     function toToken(s: string): token {
       if (["[", ",", "]"].includes(s)) return s as token;
       return parseInt(s, 10);
     }
-    return s.split(/(\[)|(,)|([0-9]+)|(\])/)
-    .filter(Boolean)
-    .map(toToken);
+    return s
+      .split(/(\[)|(,)|([0-9]+)|(\])/)
+      .filter(Boolean)
+      .map(toToken);
   }
 
   reduce(tokens: token[]): [token[], boolean] {
-    
     function findFirst(of: number, inc: number) {
       for (let i = of + inc; i >= 0 && i < tokens.length; i += inc) {
         if (typeof tokens[i] === "number") return i;
@@ -67,7 +67,7 @@ class Day18 extends Day {
               ...[0],
               ...tokens.slice(i + 4),
             ];
-            return [newTokens, true]
+            return [newTokens, true];
           }
           break;
       }
@@ -75,14 +75,14 @@ class Day18 extends Day {
 
     for (let i = 0; i < tokens.length; ++i) {
       const token = tokens[i];
-      if(typeof token === 'number'){
+      if (typeof token === "number") {
         let n = token as number;
-        if(token > 9){
+        if (token > 9) {
           let newTokens = [
             ...tokens.slice(0, i),
-            ...['[', Math.floor(n/2), ',', Math.ceil(n/2), ']'],
-            ...tokens.slice(i+1),
-          ]
+            ...["[", Math.floor(n / 2), ",", Math.ceil(n / 2), "]"],
+            ...tokens.slice(i + 1),
+          ];
           return [newTokens as token[], true];
         }
       }
@@ -91,17 +91,17 @@ class Day18 extends Day {
     return [tokens, false];
   }
 
-  addStrings(s1: string, s2: string): string{
-    return this.add(this.tokenise(s1), this.tokenise(s2)).join('');
+  addStrings(s1: string, s2: string): string {
+    return this.add(this.tokenise(s1), this.tokenise(s2)).join("");
   }
 
   add(a: token[], b: token[]): token[] {
     let intermediate: token[] = [
-      ...['[' as token],
-      ...a, 
-      ...[',' as token],
+      ...["[" as token],
+      ...a,
+      ...["," as token],
       ...b,
-      ...[']' as token],
+      ...["]" as token],
     ];
     let didSomething = false;
     do {
@@ -120,29 +120,44 @@ class Day18 extends Day {
     return num;
   }
 
+  magnitudeOfSum(numbers: token[][]): number {
+    let result = numbers.shift()!;
+    for (let thing of numbers) {
+      result = this.add(result, thing);
+    }
+    let snailNumbers = JSON.parse(result.join(""));
+    return this.magnitude(snailNumbers);
+  }
+
   solveForPartOne(input: string): string {
     let stuff = input
       .split(/[\r\n]+/g)
       .filter(Boolean)
       .map((x) => this.tokenise(x));
-    let result = stuff.shift()!;
-    for (let thing of stuff) {
-      result = this.add(result, thing);
-    }
-    let snailNumbers = JSON.parse(result.join(''));
-    return this.magnitude(snailNumbers).toString();
+    return this.magnitudeOfSum(stuff).toString();
   }
 
   solveForPartTwo(input: string): string {
-    return 'input';
+    let stuff = input
+      .split(/[\r\n]+/g)
+      .filter(Boolean)
+      .map((x) => this.tokenise(x));
+    let biggestnumber = 0;
+    for (const n1 of stuff) {
+      for (const n2 of stuff) {
+        let result = this.magnitudeOfSum([n1, n2]);
+        biggestnumber = Math.max(biggestnumber, result);
+      }
+    }
+    return biggestnumber.toString();
   }
 }
 
 export default new Day18();
 
 //// FAILED PREVIUOUS ATTEMPTS AT REDUCE :((((((
-//// Left here to commemorate the many hours spent head-desking 
-  /*
+//// Left here to commemorate the many hours spent head-desking
+/*
   reduce3(snailNumbers: snailNumber): [snailNumber, boolean] {
     function flatten(num: snailNumber, level: number): FlatNumber[] {
       let arr: FlatNumber[] = [];
