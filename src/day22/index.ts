@@ -49,15 +49,15 @@ class Day22 extends Day {
     let cubes: Map<string, cube> = new Map();
 
     for (const inst of instructions) {
-      if( 
-        (inst.x0 > 50)||
-        (inst.y0 > 50)||
-        (inst.z0 > 50)||
-        (inst.x1 < -50)||
-        (inst.y1 < -50)||
-        (inst.z1 < -50))
+      if (
+        inst.x0 > 50 ||
+        inst.y0 > 50 ||
+        inst.z0 > 50 ||
+        inst.x1 < -50 ||
+        inst.y1 < -50 ||
+        inst.z1 < -50
+      )
         continue;
-
 
       for (let x = inst.x0; x <= inst.x1; ++x) {
         for (let y = inst.y0; y <= inst.y1; ++y) {
@@ -86,7 +86,114 @@ class Day22 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return 'input';
+    let instructions = this.parse(input);
+    let areas: instruction[] = [instructions.shift()!];
+
+    const splitAreas = (a: instruction, b: instruction): instruction[] => {
+      if (
+        a.x0 > b.x1 ||
+        a.y0 > b.y1 ||
+        a.z0 > b.z1 ||
+        a.x1 < b.x0 ||
+        a.y1 < b.y0 ||
+        a.z1 < b.z0
+      )
+        return [a]; // they don't overlap
+
+      let areas: instruction[] = [];
+      if (a.x0 < b.x0) {
+        areas.push({
+          on: a.on,
+          x0: a.x0,
+          x1: b.x0 - 1,
+          y0: a.y0,
+          y1: a.y1,
+          z0: a.z0,
+          z1: a.z1,
+        });
+        a.x0 = b.x0;
+      }
+      if (a.y0 < b.y0) {
+        areas.push({
+          on: a.on,
+          x0: a.x0,
+          x1: a.x1,
+          y0: a.y0,
+          y1: b.y0 - 1,
+          z0: a.z0,
+          z1: a.z1,
+        });
+        a.y0 = b.y0;
+      }
+      if (a.z0 < b.z0) {
+        areas.push({
+          on: a.on,
+          x0: a.x0,
+          x1: a.x1,
+          y0: a.y0,
+          y1: a.y1,
+          z0: a.z0,
+          z1: b.z0 - 1,
+        });
+        a.z0 = b.z0;
+      }
+      if (a.x1 > b.x1) {
+        areas.push({
+          on: a.on,
+          x0: b.x1 + 1,
+          x1: a.x1,
+          y0: a.y0,
+          y1: a.y1,
+          z0: a.z0,
+          z1: a.z1,
+        });
+        a.x1 = b.x1;
+      }
+      if (a.y1 > b.y1) {
+        areas.push({
+          on: a.on,
+          x0: a.x0,
+          x1: a.x1,
+          y0: b.y1 + 1,
+          y1: a.y1,
+          z0: a.z0,
+          z1: a.z1,
+        });
+        a.y1 = b.y1;
+      }
+      if (a.z1 > b.z1) {
+        areas.push({
+          on: a.on,
+          x0: a.x0,
+          x1: a.x1,
+          y0: a.y0,
+          y1: a.y1,
+          z0: b.z1 + 1,
+          z1: a.z1,
+        });
+        a.z1 = b.z1;
+      }
+      return areas.filter(
+        (el) => el.x0 <= el.x1 && el.y0 <= el.y1 && el.z0 <= el.z1
+      );
+    };
+
+    for (const inst of instructions) {
+      let newAreas: instruction[] = [inst];
+
+      for (const a of areas) {
+        newAreas = [...newAreas, ...splitAreas(a, inst)];
+      }
+
+      areas = newAreas.filter(a=>a.on);
+    }
+
+    return areas
+      .reduce((acc, cur) => {
+        acc += (cur.x1 - cur.x0 + 1) * (cur.y1 - cur.y0 + 1) * (cur.z1 - cur.z0 + 1);
+        return acc;
+      }, 0)
+      .toString();
   }
 }
 
