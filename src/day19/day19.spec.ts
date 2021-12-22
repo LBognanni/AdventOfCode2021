@@ -141,4 +141,7 @@ describe("On Day 19", () => {
   it(`part 1 solves for the example input`, () => {
     expect(day19.solveForPartOne(example)).toBe("79");
   });
+  it(`part 2 solves for the example input`, () => {
+    expect(day19.solveForPartTwo(example)).toBe("3621");
+  });
 });

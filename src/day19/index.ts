@@ -178,7 +178,7 @@ class Day19 extends Day {
     return false;
   }
 
-  solveForPartOne(input: string): string {
+  matchScanners(input:string): Scanner[]{
     let scanners = this.parse(input);
     let knownScanners = [scanners.shift()!];
     let unknownScanners = scanners;
@@ -200,6 +200,13 @@ class Day19 extends Day {
       }
     }
 
+    return knownScanners;
+  }
+
+  solveForPartOne(input: string): string {
+
+    let knownScanners = this.matchScanners(input);
+
     let allThePoints = new Set(
       knownScanners.flatMap((x) => x?.beacons.map((b) => b.asComparable()))
     );
@@ -208,7 +215,19 @@ class Day19 extends Day {
   }
 
   solveForPartTwo(input: string): string {
-    return 'input';
+
+    let manhattan = (a:Vector, b:Vector) => Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]) + Math.abs(a[2]-b[2]);
+
+    let knownScanners = this.matchScanners(input);
+
+    let maxDistance = 0;
+    for(let s of knownScanners){
+      for(let other of knownScanners){
+        maxDistance = Math.max(maxDistance, manhattan(s.location.Position, other.location.Position));
+      }
+    }
+
+    return maxDistance.toString();
   }
 }
 
