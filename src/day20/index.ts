@@ -69,15 +69,13 @@ class Day20 extends Day {
     return result;
   }
 
-  solveForPartOne(input: string): string {
+  solve(input: string, times: number): string {
     let [alg, map] = this.parse(input);
 
-    for (let n = 0; n < 2; ++n) {
-      let filler = n == 0 ? "0" : alg[0];
+    for (let n = 0; n < times; ++n) {
+      let filler = n == 0 ? "0" : n % 2 == 0 ? alg[parseInt(alg[0].repeat(9), 2)] : alg[0];
       map = this.enhance(alg, map, filler);
     }
-
-    //return map.map(x=>x.join('')).join('\r\n');
 
     return map
       .reduce((acc, line) => {
@@ -90,8 +88,12 @@ class Day20 extends Day {
       .toString();
   }
 
+  solveForPartOne(input: string): string {
+    return this.solve(input, 2);
+  }
+
   solveForPartTwo(input: string): string {
-    return "input";
+    return this.solve(input, 50);
   }
 }
 
